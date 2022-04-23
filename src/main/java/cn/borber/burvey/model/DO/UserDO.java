@@ -18,5 +18,5 @@ public class UserDO {
     private String password;
     private String email;
     @TableLogic(value = "0")
-    private boolean flag;
+    private Integer flag;
 }

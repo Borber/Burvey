@@ -9,6 +9,6 @@ import java.io.Serializable;
  */
 @Data
 public class BaseUserDTO implements Serializable {
-    Long id;
-    String token;
+    private Integer id;
+    private String token;
 }
