@@ -13,11 +13,11 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @Slf4j
 @RestControllerAdvice
 public class BaseExceptionHandler {
-    @ExceptionHandler(value = Exception.class)
+    @ExceptionHandler(value = RuntimeException.class)
     @ResponseBody
-    public BaseResponseBody exceptionHandler(Exception e){
+    public BaseResponseBody exceptionHandler(RuntimeException e){
         log.error(e.getMessage());
-        return BaseResponseBody.fail(-1, "服务端错误, 请稍后重试");
+        return BaseResponseBody.fail(-1, e.getMessage());
     }
 
     @ExceptionHandler(value = LoginException.class)

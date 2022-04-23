@@ -3,6 +3,7 @@ package cn.borber.burvey.controller;
 import cn.borber.burvey.model.BaseResponseBody;
 import cn.borber.burvey.model.BaseResponseCode;
 import cn.borber.burvey.model.VO.UserLoginVO;
+import cn.borber.burvey.model.VO.UserRegisterVO;
 import cn.borber.burvey.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,8 +22,8 @@ public class UserController {
     private IUserService userService;
 
     @PostMapping("login")
-    public BaseResponseBody login(@RequestBody UserLoginVO user) {
-        String token = userService.login(user);
+    public BaseResponseBody login(@RequestBody UserLoginVO vo) {
+        String token = userService.login(vo);
         if (token != null) {
             return BaseResponseBody.success(token);
         } else {
@@ -30,9 +31,9 @@ public class UserController {
         }
     }
 
-    @PostMapping("hello")
-    public BaseResponseBody hello(@RequestBody UserLoginVO user) {
-        return BaseResponseBody.success("hello");
+    @PostMapping("register")
+    public BaseResponseBody register(@RequestBody UserRegisterVO vo) {
+        return BaseResponseBody.success(userService.register(vo));
     }
 
 }

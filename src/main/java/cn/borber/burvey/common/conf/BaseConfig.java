@@ -21,6 +21,7 @@ public class BaseConfig implements WebMvcConfigurer {
         registration.addPathPatterns("/**");
         registration.excludePathPatterns(
                 "/login",
+                "/register",
                 "/**/*.html",
                 "/**/*.js",
                 "/**/*.css");

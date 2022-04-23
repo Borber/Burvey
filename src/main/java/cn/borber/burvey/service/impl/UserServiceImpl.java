@@ -1,8 +1,10 @@
 package cn.borber.burvey.service.impl;
 
+import cn.borber.burvey.common.exception.BaseException;
 import cn.borber.burvey.common.util.JsonUtil;
 import cn.borber.burvey.mapper.UserMapper;
-import cn.borber.burvey.model.DAO.UserDAO;
+import cn.borber.burvey.model.BaseResponseBody;
+import cn.borber.burvey.model.DO.UserDO;
 import cn.borber.burvey.model.DTO.BaseUserDTO;
 import cn.borber.burvey.model.UserContext;
 import cn.borber.burvey.model.VO.UserLoginVO;
@@ -10,15 +12,14 @@ import cn.borber.burvey.model.VO.UserRegisterVO;
 import cn.borber.burvey.service.IRedisService;
 import cn.borber.burvey.service.IUserService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 import java.util.UUID;
-import java.util.concurrent.TimeUnit;
 
 /**
  * @author BORBER
@@ -34,10 +35,10 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public Long checkByUser(UserLoginVO user) {
-        LambdaQueryWrapper<UserDAO> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(UserDAO::getName, user.getName())
-                .eq(UserDAO::getPassword, user.getPassword());
-        UserDAO one = userMapper.selectOne(wrapper);
+        LambdaQueryWrapper<UserDO> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(UserDO::getName, user.getName())
+                .eq(UserDO::getPassword, user.getPassword());
+        UserDO one = userMapper.selectOne(wrapper);
         return one == null ? -1 : one.getId();
     }
 
@@ -58,7 +59,13 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public boolean register(UserRegisterVO user) {
-        UserDAO newUser = new UserDAO();
+        List<UserDO> list = new LambdaQueryChainWrapper<UserDO>(userMapper)
+                .eq(UserDO::getName, user.getName())
+                .list();
+        if (list.size() > 0) {
+            throw new BaseException("注册失败, 用户名已被占用");
+        }
+        UserDO newUser = new UserDO();
         BeanUtils.copyProperties(user, newUser);
         userMapper.insert(newUser);
         return true;
@@ -76,8 +83,8 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public boolean delete(Long id) {
-        LambdaQueryWrapper<UserDAO> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(UserDAO::getId, id);
+        LambdaQueryWrapper<UserDO> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(UserDO::getId, id);
         userMapper.delete(wrapper);
         return true;
     }
