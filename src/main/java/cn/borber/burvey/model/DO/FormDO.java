@@ -24,5 +24,6 @@ public class FormDO {
     private String endTime;
     private String data;
     @TableLogic
+    @TableField(fill = FieldFill.INSERT)
     private Integer flag;
 }

@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 /**
@@ -34,32 +35,31 @@ public class UserServiceImpl implements IUserService {
     private UserMapper userMapper;
 
     @Override
-    public Long checkByUser(UserLoginVO user) {
+    public String checkByUser(UserLoginVO user) {
         LambdaQueryWrapper<UserDO> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(UserDO::getName, user.getName())
                 .eq(UserDO::getPassword, user.getPassword());
         UserDO one = userMapper.selectOne(wrapper);
-        return one == null ? -1 : one.getId();
+        if (one == null) {
+            throw new BaseException("登陆失败");
+        }
+        return one.getId().toString();
     }
 
     @Override
     public String login(UserLoginVO user) {
-        Long id = checkByUser(user);
-        if (id != -1) {
-            String token = UUID.randomUUID().toString().replaceAll("-", "");
-            BaseUserDTO userDTO = new BaseUserDTO();
-            userDTO.setToken(token);
-            userDTO.setId(id);
-            redisService.set(token, JsonUtil.toJson(userDTO));
-            return token;
-        } else {
-            return null;
-        }
+        String id = checkByUser(user);
+        String token = UUID.randomUUID().toString().replaceAll("-", "");
+        BaseUserDTO userDTO = new BaseUserDTO();
+        userDTO.setToken(token);
+        userDTO.setId(id);
+        redisService.set(token, JsonUtil.toJson(userDTO));
+        return token;
     }
 
     @Override
     public boolean register(UserRegisterVO user) {
-        List<UserDO> list = new LambdaQueryChainWrapper<UserDO>(userMapper)
+        List<UserDO> list = new LambdaQueryChainWrapper<>(userMapper)
                 .eq(UserDO::getName, user.getName())
                 .list();
         if (list.size() > 0) {

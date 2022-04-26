@@ -1,9 +1,6 @@
 package cn.borber.burvey.model.DO;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableLogic;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
 
 /**
@@ -17,6 +14,7 @@ public class UserDO {
     private String name;
     private String password;
     private String email;
-    @TableLogic(value = "0")
+    @TableLogic
+    @TableField(fill = FieldFill.INSERT)
     private Integer flag;
 }

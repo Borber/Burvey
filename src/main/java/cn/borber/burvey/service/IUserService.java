@@ -12,7 +12,7 @@ public interface IUserService {
      * @param user 登录入参
      * @return 此用户ID
      */
-    Long checkByUser(UserLoginVO user);
+    String checkByUser(UserLoginVO user);
 
 
     /**

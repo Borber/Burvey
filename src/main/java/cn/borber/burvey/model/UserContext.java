@@ -1,5 +1,6 @@
 package cn.borber.burvey.model;
 
+import cn.borber.burvey.common.exception.BaseException;
 import cn.borber.burvey.model.DTO.BaseUserDTO;
 
 /**
@@ -8,7 +9,7 @@ import cn.borber.burvey.model.DTO.BaseUserDTO;
 public class UserContext {
     private static final ThreadLocal<BaseUserDTO> USER = new ThreadLocal<>();
 
-    public static Long getUserId() {
+    public static String getUserId() {
         BaseUserDTO baseUserDTO = getUser();
         return baseUserDTO.getId();
     }
@@ -16,7 +17,7 @@ public class UserContext {
     public static BaseUserDTO getUser() {
         BaseUserDTO baseUser = USER.get();
         if (null == baseUser) {
-//            throw new Exception("登录失效，请重新登录！");
+            throw new BaseException("登录失效，请重新登录！");
         }
         return baseUser;
     }

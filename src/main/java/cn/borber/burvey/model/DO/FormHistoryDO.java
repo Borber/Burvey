@@ -18,5 +18,6 @@ public class FormHistoryDO implements Serializable {
     @TableField("old_data")
     private String oldData;
     @TableLogic
+    @TableField(fill = FieldFill.INSERT)
     private Integer flag;
 }
