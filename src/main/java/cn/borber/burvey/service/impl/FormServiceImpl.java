@@ -61,9 +61,26 @@ public class FormServiceImpl implements IFormService {
     @Override
     public FormDTO one(String id) {
         FormDO form = formMapper.selectById(id);
-        FormDTO formDTO = new FormDTO();
-        BeanUtils.copyProperties(form, formDTO);
-        return formDTO;
+        if (form == null) {
+            throw new BaseException(1, "表单不存在");
+        }
+        if (form.getCreator().equals(CurrUserUtil.get().getUserId()) || !form.getNeedKey()) {
+            FormDTO formDTO = new FormDTO();
+            BeanUtils.copyProperties(form, formDTO);
+            return formDTO;
+        }
+        throw new BaseException(2, "请输入密码");
+    }
+
+    @Override
+    public FormDTO oneByKey(String id, String key) {
+        FormDO form = formMapper.selectById(id);
+        if (form != null && form.getTheKey().equals(key)) {
+            FormDTO formDTO = new FormDTO();
+            BeanUtils.copyProperties(form, formDTO);
+            return formDTO;
+        }
+        throw new BaseException("密码错误或表单不存在");
     }
 
     @Override

@@ -17,7 +17,7 @@ CREATE TABLE `Forms` (
                          `creator` int,
                          `star` bool,
                          `need_key` bool NOT NULL,
-                         `key` varchar(32),
+                         `the_key` varchar(32),
                          `start_time` varchar(32) NOT NULL,
                          `end_time` varchar(32) NOT NULL,
                          `data` text,

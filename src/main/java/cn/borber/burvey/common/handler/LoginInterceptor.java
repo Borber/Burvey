@@ -1,6 +1,8 @@
 package cn.borber.burvey.common.handler;
 
 import cn.borber.burvey.common.exception.LoginException;
+import cn.borber.burvey.common.model.LoginUser;
+import cn.borber.burvey.common.util.CurrUserUtil;
 import cn.borber.burvey.common.util.JsonUtil;
 import cn.borber.burvey.model.DTO.BaseUserDTO;
 import cn.borber.burvey.model.UserContext;
@@ -10,7 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -37,8 +38,8 @@ public class LoginInterceptor implements HandlerInterceptor {
             log.info("认证失败");
             throw new LoginException("登录失效，请重新登录！");
         } else {
-            BaseUserDTO user = JsonUtil.toObject(json, BaseUserDTO.class);
-            UserContext.setBaseUser(user);
+            LoginUser user = JsonUtil.toObject(json, LoginUser.class);
+            CurrUserUtil.set(user);
         }
         return true;
     }

@@ -1,25 +1,22 @@
 package cn.borber.burvey.service.impl;
 
 import cn.borber.burvey.common.exception.BaseException;
+import cn.borber.burvey.common.model.LoginUser;
+import cn.borber.burvey.common.util.CurrUserUtil;
 import cn.borber.burvey.common.util.JsonUtil;
 import cn.borber.burvey.mapper.UserMapper;
-import cn.borber.burvey.model.BaseResponseBody;
 import cn.borber.burvey.model.DO.UserDO;
-import cn.borber.burvey.model.DTO.BaseUserDTO;
-import cn.borber.burvey.model.UserContext;
 import cn.borber.burvey.model.VO.UserLoginVO;
 import cn.borber.burvey.model.VO.UserRegisterVO;
 import cn.borber.burvey.service.IRedisService;
 import cn.borber.burvey.service.IUserService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 
 /**
@@ -50,10 +47,10 @@ public class UserServiceImpl implements IUserService {
     public String login(UserLoginVO user) {
         String id = checkByUser(user);
         String token = UUID.randomUUID().toString().replaceAll("-", "");
-        BaseUserDTO userDTO = new BaseUserDTO();
-        userDTO.setToken(token);
-        userDTO.setId(id);
-        redisService.set(token, JsonUtil.toJson(userDTO));
+        LoginUser loginUser = new LoginUser();
+        loginUser.setUserId(id);
+        loginUser.setToken(token);
+        redisService.set(token, JsonUtil.toJson(loginUser));
         return token;
     }
 
@@ -73,7 +70,7 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public boolean logout() {
-        return redisService.delete(UserContext.getUser().getToken());
+        return redisService.delete(CurrUserUtil.get().getToken());
     }
 
     @Override

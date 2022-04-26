@@ -34,6 +34,14 @@ public interface IFormService {
     FormDTO one(String id);
 
     /**
+     * 通过id, 密码获取表单具体数据
+     * @param id 表格id
+     * @param key 密码
+     * @return 表格的具体数据
+     */
+    FormDTO oneByKey(String id, String key);
+
+    /**
      * 获取当前用户加星表单
      * @return 加星表格简略数据
      */

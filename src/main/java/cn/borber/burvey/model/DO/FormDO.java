@@ -17,7 +17,8 @@ public class FormDO {
     private Boolean star;
     @TableField("need_key")
     private Boolean needKey;
-    private String key;
+    @TableField("the_key")
+    private String theKey;
     @TableField("start_time")
     private String startTime;
     @TableField("end_time")

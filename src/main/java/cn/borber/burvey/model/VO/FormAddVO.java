@@ -13,7 +13,7 @@ public class FormAddVO implements Serializable {
     private String name;
     private Boolean star;
     private Boolean needKey;
-    private String key;
+    private String theKey;
     private String startTime;
     private String endTime;
     private String data;
