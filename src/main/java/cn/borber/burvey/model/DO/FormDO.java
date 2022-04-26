@@ -11,7 +11,7 @@ import lombok.Data;
 @TableName("forms")
 public class FormDO {
     @TableId(type= IdType.AUTO)
-    private String id;
+    private Integer id;
     private String name;
     private String creator;
     private Boolean star;

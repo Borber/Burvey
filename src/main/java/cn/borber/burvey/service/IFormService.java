@@ -3,6 +3,7 @@ package cn.borber.burvey.service;
 import cn.borber.burvey.model.DTO.BaseFormDTO;
 import cn.borber.burvey.model.DTO.FormDTO;
 import cn.borber.burvey.model.VO.FormAddVO;
+import cn.borber.burvey.model.VO.FormUpdateVO;
 
 import java.util.List;
 
@@ -14,15 +15,23 @@ public interface IFormService {
 
     /**
      * 新增表单数据
+     * @param vo 添加VO
      * @return 添加成功
      */
     boolean add(FormAddVO vo);
+
+    /**
+     * 更新表单
+     * @param vo 更新VO
+     * @return 更新成功
+     */
+    boolean update(FormUpdateVO vo);
     /**
      * 通过id获取表单具体数据
      * @param id 表格id
      * @return 表格的具体数据
      */
-    FormDTO one(Integer id);
+    FormDTO one(String id);
 
     /**
      * 获取当前用户加星表单
@@ -41,5 +50,5 @@ public interface IFormService {
      * @param id 表单ID
      * @return 删除成功
      */
-    Integer delete(Integer id);
+    boolean delete(String id);
 }

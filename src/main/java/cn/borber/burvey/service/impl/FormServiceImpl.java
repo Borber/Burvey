@@ -1,11 +1,15 @@
 package cn.borber.burvey.service.impl;
 
+import cn.borber.burvey.common.exception.BaseException;
 import cn.borber.burvey.common.util.CurrUserUtil;
+import cn.borber.burvey.mapper.FormHistoryMapper;
 import cn.borber.burvey.mapper.FormMapper;
 import cn.borber.burvey.model.DO.FormDO;
+import cn.borber.burvey.model.DO.FormHistoryDO;
 import cn.borber.burvey.model.DTO.BaseFormDTO;
 import cn.borber.burvey.model.DTO.FormDTO;
 import cn.borber.burvey.model.VO.FormAddVO;
+import cn.borber.burvey.model.VO.FormUpdateVO;
 import cn.borber.burvey.service.IFormService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import org.springframework.beans.BeanUtils;
@@ -19,10 +23,13 @@ import java.util.stream.Collectors;
  * @author BORBER
  */
 @Service
-public class IFormServiceImpl implements IFormService {
+public class FormServiceImpl implements IFormService {
 
     @Autowired
     private FormMapper formMapper;
+
+    @Autowired
+    private FormHistoryMapper formHistoryMapper;
 
     @Override
     public boolean add(FormAddVO vo) {
@@ -34,7 +41,25 @@ public class IFormServiceImpl implements IFormService {
     }
 
     @Override
-    public FormDTO one(Integer id) {
+    public boolean update(FormUpdateVO vo) {
+        FormDO form = formMapper.selectById(vo.getId());
+        if (form == null) {
+            throw new BaseException("非法用户操作");
+        }
+        FormHistoryDO historyDO = new FormHistoryDO();
+        historyDO.setFormId(form.getId());
+        historyDO.setOldData(form.getData());
+        form.setData(vo.getData());
+        if (form.getCreator().equals(CurrUserUtil.get().getUserId())) {
+            formHistoryMapper.insert(historyDO);
+            formMapper.updateById(form);
+            return true;
+        }
+        throw new BaseException("非法用户操作");
+    }
+
+    @Override
+    public FormDTO one(String id) {
         FormDO form = formMapper.selectById(id);
         FormDTO formDTO = new FormDTO();
         BeanUtils.copyProperties(form, formDTO);
@@ -60,7 +85,15 @@ public class IFormServiceImpl implements IFormService {
     }
 
     @Override
-    public Integer delete(Integer id) {
-        return formMapper.deleteById(id);
+    public boolean delete(String id) {
+        FormDO form = formMapper.selectById(id);
+        if (form == null) {
+            throw new BaseException("表单" + id +"不存在");
+        }
+        if (form.getCreator().equals(CurrUserUtil.get().getUserId())){
+            formMapper.deleteById(id);
+            return true;
+        }
+        throw new BaseException("非法用户操作");
     }
 }
