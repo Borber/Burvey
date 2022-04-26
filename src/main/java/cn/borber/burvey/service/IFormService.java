@@ -25,7 +25,7 @@ public interface IFormService {
      * @param vo 更新VO
      * @return 更新成功
      */
-    boolean update(FormUpdateVO vo);
+    boolean update(String id, FormUpdateVO vo);
     /**
      * 通过id获取表单具体数据
      * @param id 表格id

@@ -8,6 +8,6 @@ import java.io.Serializable;
  * @author BORBER
  */
 @Data
-public class FormUpdateVO implements Serializable {
-    private String data;
+public class FormGetByKeyVO implements Serializable {
+    private String key;
 }

@@ -15,7 +15,7 @@ public class FormHistoryDO implements Serializable {
     private Integer id;
     @TableField("form_id")
     private Integer formId;
-    @TableField("old_data")
+    @TableField("old_text")
     private String oldData;
     @TableLogic
     @TableField(fill = FieldFill.INSERT)

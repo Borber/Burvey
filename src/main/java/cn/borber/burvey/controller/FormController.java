@@ -2,6 +2,7 @@ package cn.borber.burvey.controller;
 
 import cn.borber.burvey.model.BaseResponseBody;
 import cn.borber.burvey.model.VO.FormAddVO;
+import cn.borber.burvey.model.VO.FormGetByKeyVO;
 import cn.borber.burvey.model.VO.FormUpdateVO;
 import cn.borber.burvey.service.IFormService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,9 +33,13 @@ public class FormController {
         return BaseResponseBody.success(formService.one(id));
     }
 
+    @PostMapping("form/p/{id}")
+    public BaseResponseBody oneByKey(@PathVariable("id") String id, @RequestBody FormGetByKeyVO vo) {
+        return BaseResponseBody.success(formService.oneByKey(id, vo.getKey()));
+    }
     @PutMapping("form/{id}")
     public BaseResponseBody put(@PathVariable("id") String id, @RequestBody FormUpdateVO vo) {
-        return BaseResponseBody.success(formService.update(vo));
+        return BaseResponseBody.success(formService.update(id, vo));
     }
 
     @PostMapping("form-star")

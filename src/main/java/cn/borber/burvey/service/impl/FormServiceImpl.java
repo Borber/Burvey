@@ -41,8 +41,8 @@ public class FormServiceImpl implements IFormService {
     }
 
     @Override
-    public boolean update(FormUpdateVO vo) {
-        FormDO form = formMapper.selectById(vo.getId());
+    public boolean update(String id, FormUpdateVO vo) {
+        FormDO form = formMapper.selectById(id);
         if (form == null) {
             throw new BaseException("非法用户操作");
         }
@@ -105,7 +105,7 @@ public class FormServiceImpl implements IFormService {
     public boolean delete(String id) {
         FormDO form = formMapper.selectById(id);
         if (form == null) {
-            throw new BaseException("表单" + id +"不存在");
+            throw new BaseException(1, "表单" + id +"不存在或已被删除");
         }
         if (form.getCreator().equals(CurrUserUtil.get().getUserId())){
             formMapper.deleteById(id);
