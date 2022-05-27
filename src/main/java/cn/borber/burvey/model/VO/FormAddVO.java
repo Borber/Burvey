@@ -12,6 +12,7 @@ import java.io.Serializable;
 public class FormAddVO implements Serializable {
     private String name;
     private Boolean star;
+    private Boolean publish;
     private Boolean needKey;
     private String theKey;
     private String startTime;

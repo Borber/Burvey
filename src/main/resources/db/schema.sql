@@ -2,7 +2,6 @@ DROP TABLE IF EXISTS `History_Forms`;
 DROP TABLE IF EXISTS `Reply`;
 DROP TABLE IF EXISTS `Forms`;
 DROP TABLE IF EXISTS `users`;
-
 CREATE TABLE `Users` (
                          `id` int PRIMARY KEY AUTO_INCREMENT,
                          `name` varchar(32) NOT NULL,
@@ -16,6 +15,7 @@ CREATE TABLE `Forms` (
                          `name` varchar(32) NOT NULL,
                          `creator` int,
                          `star` bool,
+                         `publish` bool,
                          `need_key` bool NOT NULL,
                          `the_key` varchar(32),
                          `start_time` varchar(32) NOT NULL,

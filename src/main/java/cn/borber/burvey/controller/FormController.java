@@ -3,6 +3,7 @@ package cn.borber.burvey.controller;
 import cn.borber.burvey.model.BaseResponseBody;
 import cn.borber.burvey.model.VO.FormAddVO;
 import cn.borber.burvey.model.VO.FormGetByKeyVO;
+import cn.borber.burvey.model.VO.FormPublishVO;
 import cn.borber.burvey.model.VO.FormUpdateVO;
 import cn.borber.burvey.service.IFormService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,6 +51,11 @@ public class FormController {
     @DeleteMapping("form/{id}")
     public BaseResponseBody delete(@PathVariable("id") String id) {
         return BaseResponseBody.success(formService.delete(id));
+    }
+
+    @PostMapping("form-publish")
+    public BaseResponseBody publish(@RequestBody FormPublishVO vo) {
+        return BaseResponseBody.success(formService.publish(vo));
     }
 
 }

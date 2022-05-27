@@ -9,6 +9,7 @@ import cn.borber.burvey.model.DO.FormHistoryDO;
 import cn.borber.burvey.model.DTO.BaseFormDTO;
 import cn.borber.burvey.model.DTO.FormDTO;
 import cn.borber.burvey.model.VO.FormAddVO;
+import cn.borber.burvey.model.VO.FormPublishVO;
 import cn.borber.burvey.model.VO.FormUpdateVO;
 import cn.borber.burvey.service.IFormService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -44,7 +45,7 @@ public class FormServiceImpl implements IFormService {
     public boolean update(String id, FormUpdateVO vo) {
         FormDO form = formMapper.selectById(id);
         if (form == null) {
-            throw new BaseException("非法用户操作");
+            throw new BaseException("表单不存在");
         }
         FormHistoryDO historyDO = new FormHistoryDO();
         historyDO.setFormId(form.getId());
@@ -52,6 +53,20 @@ public class FormServiceImpl implements IFormService {
         form.setData(vo.getData());
         if (form.getCreator().equals(CurrUserUtil.get().getUserId())) {
             formHistoryMapper.insert(historyDO);
+            formMapper.updateById(form);
+            return true;
+        }
+        throw new BaseException("非法用户操作");
+    }
+
+    @Override
+    public boolean publish(FormPublishVO vo) {
+        FormDO form = formMapper.selectById(vo.getId());
+        if (form == null) {
+            throw new BaseException(1, "表单不存在");
+        }
+        if (form.getCreator().equals(CurrUserUtil.get().getUserId())) {
+            form.setPublish(vo.getStatus());
             formMapper.updateById(form);
             return true;
         }

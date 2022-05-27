@@ -3,6 +3,7 @@ package cn.borber.burvey.service;
 import cn.borber.burvey.model.DTO.BaseFormDTO;
 import cn.borber.burvey.model.DTO.FormDTO;
 import cn.borber.burvey.model.VO.FormAddVO;
+import cn.borber.burvey.model.VO.FormPublishVO;
 import cn.borber.burvey.model.VO.FormUpdateVO;
 
 import java.util.List;
@@ -22,10 +23,20 @@ public interface IFormService {
 
     /**
      * 更新表单
+     * @param id 文章ID
      * @param vo 更新VO
      * @return 更新成功
      */
     boolean update(String id, FormUpdateVO vo);
+
+
+    /**
+     * 更改发布状态
+     * @param vo 入参
+     * @return 修改成功
+     */
+    boolean publish(FormPublishVO vo);
+
     /**
      * 通过id获取表单具体数据
      * @param id 表格id
